@@ -33,10 +33,13 @@ def plugin():
                 gr.Markdown("③ 在左侧参数设置区域中配置本次生成所使用的参数.")
                 gr.Markdown("④ 点击 **开始生成** 按钮, 生成 1 张图片查看效果.")
                 gr.Markdown("⑤ **不要跳过**上一步, 完成上述操作后点击推文生图按钮.")
-                gr.Markdown("Tips: 支持使用 vibe, 角色参考, wildcards 等功能.")
+                gr.Markdown(
+                    "Tips: 支持使用 vibe, 角色参考, 角色分区, wildcards 等功能."
+                )
                 gr.Markdown("注意: 停止生成后**无法**从某个位置继续生成.")
                 gr.Markdown("注意: 选择同一个 *.xlsx 文件重复生成时, 图片会重叠.")
                 gr.Markdown("注意: 生成过程中请勿执行其它使用官网 API 的生成操作.")
+                gr.Markdown("注意: wildcards 在角色分区中**无法使用**顺序或随机选项.")
 
             story_clear_btn.click(
                 lambda x: x, gr.Textbox(None, visible=False), story_input_text
