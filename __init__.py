@@ -39,7 +39,6 @@ def plugin():
                 gr.Markdown("注意: 停止生成后**无法**从某个位置继续生成.")
                 gr.Markdown("注意: 选择同一个 *.xlsx 文件重复生成时, 图片会重叠.")
                 gr.Markdown("注意: 生成过程中请勿执行其它使用官网 API 的生成操作.")
-                gr.Markdown("注意: wildcards 在角色分区中**无法使用**顺序或随机选项.")
 
             story_clear_btn.click(
                 lambda x: x, gr.Textbox(None, visible=False), story_input_text

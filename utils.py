@@ -8,7 +8,7 @@ import ujson as json
 from openpyxl.drawing.image import Image
 from openpyxl.styles import Alignment
 
-from utils import read_json, replace_wildcards, sleep_for_cool
+from utils import find_and_replace_wildcards_from_dict, read_json, sleep_for_cool
 from utils.environment import env
 from utils.generator import Generator
 from utils.logger import logger
@@ -61,12 +61,6 @@ def main(file_path, images_number):
     col_num = 2
     positive = sheet[f"B{col_num}"].value
 
-    try:
-        json_data = read_json("./last.json")
-    except FileNotFoundError:
-        logger.error("未进行一次图片生成!")
-        return gr.update(value="未进行一次图片生成!", visible=True)
-
     num = 1
     while positive is not None:
         _break = read_json("./outputs/temp_break.json")
@@ -80,16 +74,23 @@ def main(file_path, images_number):
             if _break["break"]:
                 break
 
+            try:
+                json_data = read_json("./outputs/temp_last_origin.json")
+            except FileNotFoundError:
+                logger.error("未进行一次图片生成!")
+                return gr.update(value="未进行一次图片生成!", visible=True)
+
             logger.info(f"正在生成第 {num} 张图片...")
-            _positive = replace_wildcards(positive)
             if json_data.get("model") in ["nai-diffusion-3", "nai-diffusion-furry-3"]:
                 pass
             else:
                 json_data["parameters"]["v4_prompt"]["caption"][
                     "base_caption"
-                ] = _positive
-            json_data["input"] = _positive
+                ] = positive
+            json_data["input"] = positive
             json_data["parameters"]["seed"] = random.randint(1000000000, 9999999999)
+
+            json_data = find_and_replace_wildcards_from_dict(json_data)
 
             saved_path = None
             while saved_path is None:
