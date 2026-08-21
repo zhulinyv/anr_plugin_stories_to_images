@@ -102,7 +102,9 @@ def main(file_path, images_number):
                 image_data = generator.generate(json_data)
                 if image_data:
                     saved_path = generator.save(
-                        image_data, "text2image", json_data["parameters"]["seed"]
+                        image_data,
+                        "text2image/{}{}".format(number_to_letters(row_num), col_num),
+                        json_data["parameters"]["seed"],
                     )
                 else:
                     sleep_for_cool(5)
