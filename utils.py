@@ -98,12 +98,16 @@ def main(file_path, images_number):
                 if _break["break"]:
                     logger.warning("已停止生成!")
                     break
-
-                image_data = generator.generate(json_data)
+                try:
+                    image_data = generator.generate(json_data)
+                except Exception as e:
+                    logger.error(f"出现错误: {e}")
+                    sleep_for_cool(5)
+                    image_data = None
                 if image_data:
                     saved_path = generator.save(
                         image_data,
-                        "text2image/{}{}".format(number_to_letters(row_num), col_num),
+                        "text2image/{}".format(number_to_letters(row_num)),
                         json_data["parameters"]["seed"],
                     )
                 else:
