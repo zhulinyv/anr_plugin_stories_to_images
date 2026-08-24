@@ -106,11 +106,9 @@ def main(file_path, images_number):
                 if image_data:
                     saved_path = generator.save(
                         image_data,
-                        "text2image",
+                        "text2image/stories2images",
                         json_data["parameters"]["seed"],
-                        (env.custom_path).replace(
-                            "<日期>", "<日期>/stories2images{}".format(col_num)
-                        ),
+                        f"/{col_num - 1}/".join((env.custom_path).rsplit("/", 1)),
                     )
                 else:
                     sleep_for_cool(5)
