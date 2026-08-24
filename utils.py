@@ -102,13 +102,15 @@ def main(file_path, images_number):
                     image_data = generator.generate(json_data)
                 except Exception as e:
                     logger.error(f"出现错误: {e}")
-                    sleep_for_cool(5)
                     image_data = None
                 if image_data:
                     saved_path = generator.save(
                         image_data,
-                        "text2image/{}".format(number_to_letters(row_num)),
+                        "text2image",
                         json_data["parameters"]["seed"],
+                        (env.custom_path).replace(
+                            "<日期>", "<日期>/stories2images{}".format(col_num)
+                        ),
                     )
                 else:
                     sleep_for_cool(5)
