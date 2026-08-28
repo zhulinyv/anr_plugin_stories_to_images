@@ -1,7 +1,6 @@
 import os
 import random
 
-import gradio as gr
 import openpyxl
 import openpyxl.cell
 import ujson as json
@@ -78,7 +77,7 @@ def main(file_path, images_number):
                 json_data = read_json("./outputs/temp_last_origin.json")
             except FileNotFoundError:
                 logger.error("未进行一次图片生成!")
-                return gr.update(value="未进行一次图片生成!", visible=True)
+                return "未进行一次图片生成!"
 
             logger.info(f"正在生成第 {num} 张图片...")
             if json_data.get("model") in ["nai-diffusion-3", "nai-diffusion-furry-3"]:
@@ -134,6 +133,4 @@ def main(file_path, images_number):
     workbook.save(file_path)
     logger.success(f"全部 TAG 生成完毕, 打开 {file_path} 以查看结果!")
 
-    return gr.update(
-        value=f"全部 TAG 生成完毕, 打开 {file_path} 以查看结果!", visible=True
-    )
+    return f"全部 TAG 生成完毕, 打开 {file_path} 以查看结果!"
