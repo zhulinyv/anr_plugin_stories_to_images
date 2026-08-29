@@ -28,9 +28,9 @@ def register(plugin: Plugin):
             Field(id="images_number", label="每段 TAG 生成图片的数量", type="slider", min=1, max=999, step=1, default=3, column="right"),
         ],
         actions=[
-            Action(id="generate", label="📝 推文生图", inputs=["file", "images_number"], show_output=False, handler=lambda v: {"text": main(v.get("file", ""), int(v.get("images_number", 3)))}),
-            Action(id="open_dir", label="📂 打开插件目录", inputs=[], show_output=False, stop=False, handler=lambda v: (open_folder(PLUGIN_DIR), {})[1]),
-            Action(id="open_file", label="📂 打开文件", inputs=["file"], show_output=False, stop=False, handler=lambda v: (open_file(v.get("file", "")), {})[1]),
+            Action(id="generate", label="📝 推文生图", inputs=["file", "images_number"], show_output=False, uses_novelai=True, handler=lambda v: {"text": main(v.get("file", ""), int(v.get("images_number", 3)))}),
+            Action(id="open_dir", label="📂 打开插件目录", inputs=[], show_output=False, stop=False, uses_novelai=False, handler=lambda v: (open_folder(PLUGIN_DIR), {})[1]),
+            Action(id="open_file", label="📂 打开文件", inputs=["file"], show_output=False, stop=False, uses_novelai=False, handler=lambda v: (open_file(v.get("file", "")), {})[1]),
         ],
     )
     plugin.title = "推文生图"

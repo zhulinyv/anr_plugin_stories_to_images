@@ -7,7 +7,7 @@ import ujson as json
 from openpyxl.drawing.image import Image
 from openpyxl.styles import Alignment
 
-from utils import find_and_replace_wildcards_from_dict, read_json, sleep_for_cool
+from utils import check_stop, find_and_replace_wildcards_from_dict, read_json, reset_stop, sleep_for_cool
 from utils.environment import env
 from utils.generator import Generator
 from utils.logger import logger
@@ -60,8 +60,7 @@ def open_file(path):
 
 
 def main(file_path, images_number):
-    with open("./outputs/temp_break.json", "w") as f:
-        json.dump({"break": False}, f)
+    reset_stop()  # 重置本任务的停止信号 (生图队列按任务独立管理)
 
     workbook = openpyxl.load_workbook(file_path)
     # 关闭加载时打开的底层 zip 归档, 避免重复保存到同一路径时出现 "I/O operation on closed file"
@@ -78,15 +77,13 @@ def main(file_path, images_number):
     num = 1
     try:
         while positive is not None:
-            _break = read_json("./outputs/temp_break.json")
-            if _break["break"]:
+            if check_stop():
                 logger.warning("已停止生成!")
                 break
 
             row_num = ord("C") - 65
             for _ in range(images_number):
-                _break = read_json("./outputs/temp_break.json")
-                if _break["break"]:
+                if check_stop():
                     break
 
                 try:
@@ -110,8 +107,7 @@ def main(file_path, images_number):
                 saved_path = None
                 retries = 0
                 while saved_path is None:
-                    _break = read_json("./outputs/temp_break.json")
-                    if _break["break"]:
+                    if check_stop():
                         logger.warning("已停止生成!")
                         break
                     try:
