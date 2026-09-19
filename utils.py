@@ -81,8 +81,8 @@ def _refresh_image_refs(sheet):
                 img._raw_bytes = data
             if data is not None:
                 img.ref = io.BytesIO(data)
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug(f"读取图片数据失败: {e}")
 
 
 def _save_workbook(workbook, file_path, sheet):
@@ -111,6 +111,7 @@ def _save_workbook(workbook, file_path, sheet):
                 sheet._images.remove(img)
                 removed += 1
                 logger.warning(f"已跳过异常图片: {getattr(img, 'ref', '?')}")
+                logger.opt(exception=True).debug("跳过异常图片堆栈:")
         if removed:
             try:
                 _write()
@@ -268,6 +269,7 @@ def main(file_path, images_number):
             _save_workbook(workbook, file_path, sheet)
     except Exception as e:
         logger.error(f"处理过程出错: {e}")
+        logger.opt(exception=True).debug("处理过程出错堆栈:")
     finally:
         # 无论正常/异常/停止, 最终都对齐并保存一次, 已生成的图片全部保留
         try:
