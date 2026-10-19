@@ -13,6 +13,7 @@ from utils.variable import return_quality_tags
 from utils.environment import env
 from utils.generator import Generator
 from utils.logger import logger
+from utils.paths import SHARED_LAST_ORIGIN, shared_temp_path
 
 generator = Generator("https://image.novelai.net/ai/generate-image")
 
@@ -188,7 +189,8 @@ def main(file_path, images_number):
                     break
 
                 try:
-                    json_data = read_json("./outputs/temp_last_origin.json")
+                    # 跨任务读取: 这个文件由主程序 (或随机画风插件) 生成, 见 utils/paths.py
+                    json_data = read_json(shared_temp_path(SHARED_LAST_ORIGIN))
                 except FileNotFoundError:
                     logger.error("未进行一次图片生成!")
                     return "未进行一次图片生成!"
